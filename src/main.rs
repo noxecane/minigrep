@@ -11,8 +11,19 @@ fn main() {
         process::exit(1);
     });
 
-    if let Err(e) = minigrep::run(conf) {
-        eprintln!("Application Error: {}", e);
-        process::exit(1);
-    };
+    match minigrep::run(conf) {
+        Ok(results) => {
+            if results.is_empty() {
+                process::exit(1);
+            } else {
+                for line in results {
+                    println!("{}", line);
+                }
+            }
+        },
+        Err(e) => {
+            eprintln!("Application Error: {}", e);
+            process::exit(1);
+        }
+    }
 }
